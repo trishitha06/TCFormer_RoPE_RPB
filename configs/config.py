@@ -135,3 +135,8 @@ class Config:
 
 
 cfg = Config()
+
+import os
+
+if os.path.exists("/kaggle/input/datasets/trishithapenmatsa/bcic2a-data"):
+    cfg.DATA_PATH = "/kaggle/input/datasets/trishithapenmatsa/bcic2a-data"
