@@ -6,7 +6,7 @@ from torch.optim import AdamW
 
 from configs.config import Config
 
-from datasets.bcic2a_data import BCIC2aDataset
+from datasets.bcic2a import BCIC2aDataset
 
 from models.tcformer import TCFormer
 
