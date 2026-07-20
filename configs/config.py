@@ -9,7 +9,7 @@ class Config:
 
     DATASET = "BCICIV2A"
 
-    DATA_PATH = "./data"
+    DATA_PATH = "/kaggle/input/datasets/trishithapenmatsa/bcic2a-data"
 
     NUM_CLASSES = 4
 
