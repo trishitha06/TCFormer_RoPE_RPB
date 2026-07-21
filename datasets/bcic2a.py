@@ -89,7 +89,7 @@ class BCIC2aDataset(Dataset):
         )
 
 
-        def load_subject(self, filepath):
+    def load_subject(self, filepath):
 
         raw = mne.io.read_raw_gdf(
             filepath,
@@ -174,6 +174,7 @@ class BCIC2aDataset(Dataset):
             self.labels.append(
                 reverse_mapping[label]
             )
+            
     def __len__(self):
 
         return len(self.data)
