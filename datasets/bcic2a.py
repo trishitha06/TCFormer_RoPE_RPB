@@ -99,15 +99,18 @@ class BCIC2aDataset(Dataset):
 
         print("\nOriginal Channels:")
         print(raw.ch_names)
+        OFFICIAL_CHANNELS = [
+            "Fz",
+            "FC3", "FC1", "FCz", "FC2", "FC4",
+            "C5", "C3", "C1", "Cz", "C2", "C4", "C6",
+            "CP3", "CP1", "CPz", "CP2", "CP4",
+            "P1", "Pz", "P2", "POz"
+        ]
 
-        # Remove EEG- prefix
         rename_dict = {}
 
-        for ch in raw.ch_names:
-
-            if ch.startswith("EEG-"):
-
-                rename_dict[ch] = ch.replace("EEG-", "")
+        for old_name, new_name in zip(raw.ch_names[:22], OFFICIAL_CHANNELS):
+            rename_dict[old_name] = new_name
 
         raw.rename_channels(rename_dict)
 
