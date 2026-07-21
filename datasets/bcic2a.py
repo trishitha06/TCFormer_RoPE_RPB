@@ -91,61 +91,89 @@ class BCIC2aDataset(Dataset):
 
     def load_subject(self, filepath):
 
-        raw = mne.io.read_raw_gdf(
-            filepath,
-            preload=True,
-            verbose=False
+    raw = mne.io.read_raw_gdf(
+        filepath,
+        preload=True,
+        verbose=False
+    )
+
+    print("\nOriginal Channels:")
+    print(raw.ch_names)
+
+    # Remove EEG- prefix
+    rename_dict = {}
+
+    for ch in raw.ch_names:
+
+        if ch.startswith("EEG-"):
+
+            rename_dict[ch] = ch.replace("EEG-", "")
+
+    raw.rename_channels(rename_dict)
+
+    print("\nRenamed Channels:")
+    print(raw.ch_names)
+
+    available_channels = []
+
+    for ch in SELECTED_CHANNELS:
+
+        if ch in raw.ch_names:
+
+            available_channels.append(ch)
+
+    print("\nAvailable Channels:")
+    print(available_channels)
+
+    raw.pick(available_channels)
+
+    events, event_dict = mne.events_from_annotations(raw)
+
+    event_mapping = {}
+
+    for event_name in EVENTS.keys():
+
+        if event_name in event_dict:
+
+            event_mapping[event_name] = event_dict[event_name]
+
+    if len(event_mapping) == 0:
+
+        raise RuntimeError(
+            f"No motor imagery events found in {filepath}"
         )
-        print(raw.ch_names)
 
-        raw.pick(SELECTED_CHANNELS)
+    epochs = mne.Epochs(
+        raw=raw,
+        events=events,
+        event_id=event_mapping,
+        tmin=2.0,
+        tmax=6.0,
+        baseline=None,
+        preload=True,
+        verbose=False
+    )
 
-        events, event_dict = mne.events_from_annotations(raw)
+    X = epochs.get_data(copy=True)
 
-        event_mapping = {}
+    print("Epoch Shape:", X.shape)
 
-        for event_name in EVENTS.keys():
+    y = epochs.events[:, -1]
 
-            if event_name in event_dict:
+    reverse_mapping = {
+        value: EVENTS[key]
+        for key, value in event_mapping.items()
+    }
 
-                event_mapping[event_name] = event_dict[event_name]
+    for trial, label in zip(X, y):
 
-        if len(event_mapping) == 0:
+        trial = preprocess_trial(trial)
 
-            raise RuntimeError(
-                f"No motor imagery events found in {filepath}"
-            )
+        self.data.append(trial)
 
-        epochs = mne.Epochs(
-            raw=raw,
-            events=events,
-            event_id=event_mapping,
-            tmin=2.0,
-            tmax=6.0,
-            baseline=None,
-            preload=True,
-            verbose=False
+        self.labels.append(
+            reverse_mapping[label]
         )
-
-        X = epochs.get_data(copy=True)
-
-        y = epochs.events[:, -1]
-
-        reverse_mapping = {
-            value: EVENTS[key]
-            for key, value in event_mapping.items()
-        }
-
-        for trial, label in zip(X, y):
-
-            trial = preprocess_trial(trial)
-
-            self.data.append(trial)
-
-            self.labels.append(
-                reverse_mapping[label]
-            )
-
     def __len__(self):
 
         return len(self.data)
