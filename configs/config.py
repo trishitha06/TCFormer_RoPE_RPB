@@ -65,7 +65,6 @@ class Config:
 
     MLP_RATIO = 4
 
-    DROPOUT = 0.3
 
     ATTENTION_DROPOUT = 0.1
 
@@ -107,13 +106,12 @@ class Config:
     # Classification
     #####################################################
 
-    LABEL_SMOOTHING = 0.1
 
     #####################################################
     # Scheduler
     #####################################################
 
-    WARMUP_EPOCHS = 10
+
 
     MIN_LR = 1e-6
 
@@ -143,7 +141,6 @@ class Config:
     # Gradient Clipping
     #####################################################
 
-    CLIP_GRAD = 1.0
 
 
 cfg = Config()
