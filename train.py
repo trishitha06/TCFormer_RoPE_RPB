@@ -26,24 +26,39 @@ def main():
 
     print(f"Using device: {device}")
 
-    from torch.utils.data import random_split
+    from torch.utils.data import random_split, Subset
 
     subjects = [1, 2, 3, 4, 5, 6, 7]
 
-    full_dataset = BCIC2aDataset(
+# Training dataset (augmentation enabled)
+    train_full = BCIC2aDataset(
         root=cfg.DATA_PATH,
         subjects=subjects,
         train=True
     )
 
-    train_size = int(0.8 * len(full_dataset))
-    val_size = len(full_dataset) - train_size
-
-    train_dataset, val_dataset = random_split(
-        full_dataset,
-        [train_size, val_size],
-        generator=torch.Generator().manual_seed(cfg.SEED)
+# Validation dataset (augmentation disabled)
+    val_full = BCIC2aDataset(
+        root=cfg.DATA_PATH,
+        subjects=subjects,
+        train=False
     )
+
+    dataset_size = len(train_full)
+
+    train_size = int(0.8 * dataset_size)
+    val_size = dataset_size - train_size
+
+    generator = torch.Generator().manual_seed(cfg.SEED)
+
+    train_subset, val_subset = random_split(
+        range(dataset_size),
+        [train_size, val_size],
+        generator=generator
+    )
+
+    train_dataset = Subset(train_full, train_subset.indices)
+    val_dataset = Subset(val_full, val_subset.indices)
 
     train_loader = DataLoader(
         train_dataset,
