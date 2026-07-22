@@ -99,30 +99,15 @@ class BCIC2aDataset(Dataset):
 
         print("\nOriginal Channels:")
         print(raw.ch_names)
-        rename_dict = {}
+        # Keep the first 22 EEG channels.
+        # The last 3 channels are EOG.
 
-        for ch in raw.ch_names:
-            if ch.startswith("EEG-"):
-                rename_dict[ch] = ch.replace("EEG-", "")
+        eeg_channels = raw.ch_names[:22]
 
-        raw.rename_channels(rename_dict)
+        print("\nUsing EEG Channels:")
+        print(eeg_channels)
 
-        print("\nRenamed Channels:")
-        print(raw.ch_names)
-
-        available_channels = []
-
-        for ch in SELECTED_CHANNELS:
-
-            if ch in raw.ch_names:
-
-                available_channels.append(ch)
-
-        print("\nAvailable Channels:")
-        print(available_channels)
-
-        raw.pick(available_channels)
-
+        raw.pick(eeg_channels)
         events, event_dict = mne.events_from_annotations(raw)
 
         event_mapping = {}
