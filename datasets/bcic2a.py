@@ -59,10 +59,7 @@ class BCIC2aDataset(Dataset):
 
         for subject in self.subjects:
 
-            if self.train:
-                filename = f"A{subject:02d}T.gdf"
-            else:
-                filename = f"A{subject:02d}E.gdf"
+            filename = f"A{subject:02d}T.gdf"
 
             filepath = os.path.join(
                 self.root,
