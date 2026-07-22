@@ -23,13 +23,25 @@ class Config:
     # Training
     #####################################################
 
-    EPOCHS = 300
+    EPOCHS = 500
 
-    BATCH_SIZE = 64
+    BATCH_SIZE = 32
 
-    LR = 1e-3
+    LR = 3e-4
 
-    WEIGHT_DECAY = 1e-4
+    WEIGHT_DECAY = 5e-4
+
+    LABEL_SMOOTHING = 0.05
+
+    DROPOUT = 0.2
+
+    ATTENTION_DROPOUT = 0.1
+
+    CLIP_GRAD = 0.5
+
+    WARMUP_EPOCHS = 20
+
+    MIN_LR = 1e-6
 
     NUM_WORKERS = 4
 
