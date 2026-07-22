@@ -8,8 +8,8 @@ from scipy.signal import butter, filtfilt
 
 def bandpass_filter(
     data,
-    lowcut=2,
-    highcut=40,
+    lowcut=4,
+    highcut=38,
     fs=250,
     order=4
 ):
