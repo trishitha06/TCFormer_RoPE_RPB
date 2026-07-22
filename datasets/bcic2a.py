@@ -46,7 +46,7 @@ class BCIC2aDataset(Dataset):
 
         self.root = root
         self.subjects = subjects
-        self.train = train
+        self.use_augmentation = train
 
         self.augment = EEGAugmentation()
 
@@ -165,7 +165,7 @@ class BCIC2aDataset(Dataset):
 
         label = self.labels[index]
 
-        if self.train:
+        if self.use_augmentation:
 
             trial = self.augment(trial)
 
