@@ -12,7 +12,7 @@ class TCFormer(nn.Module):
 
         self,
 
-        num_channels=22,
+        num_channels=cfg.NUM_CHANNELS,
 
         embed_dim=128,
 
