@@ -9,11 +9,11 @@ class Config:
 
     DATASET = "BCICIV2A"
 
-    DATA_PATH = "/kaggle/input/datasets/trishithapenmatsa/bcic2a-data"
+    DATA_PATH = "./data"
 
     NUM_CLASSES = 4
 
-    NUM_CHANNELS = 3
+    NUM_CHANNELS = 22
 
     SAMPLING_RATE = 250
 
@@ -23,25 +23,13 @@ class Config:
     # Training
     #####################################################
 
-    EPOCHS = 500
+    EPOCHS = 2
 
-    BATCH_SIZE = 32
+    BATCH_SIZE = 64
 
     LR = 3e-4
 
     WEIGHT_DECAY = 5e-4
-
-    LABEL_SMOOTHING = 0.05
-
-    DROPOUT = 0.2
-
-    ATTENTION_DROPOUT = 0.1
-
-    CLIP_GRAD = 0.5
-
-    WARMUP_EPOCHS = 20
-
-    MIN_LR = 1e-6
 
     NUM_WORKERS = 4
 
@@ -65,6 +53,7 @@ class Config:
 
     MLP_RATIO = 4
 
+    DROPOUT = 0.3
 
     ATTENTION_DROPOUT = 0.1
 
@@ -106,12 +95,13 @@ class Config:
     # Classification
     #####################################################
 
+    LABEL_SMOOTHING = 0.1
 
     #####################################################
     # Scheduler
     #####################################################
 
-
+    WARMUP_EPOCHS = 10
 
     MIN_LR = 1e-6
 
@@ -141,11 +131,7 @@ class Config:
     # Gradient Clipping
     #####################################################
 
+    CLIP_GRAD = 1.0
 
 
 cfg = Config()
-
-import os
-
-if os.path.exists("/kaggle/input/datasets/trishithapenmatsa/bcic2a-data"):
-    cfg.DATA_PATH = "/kaggle/input/datasets/trishithapenmatsa/bcic2a-data"
