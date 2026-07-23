@@ -96,15 +96,20 @@ class BCIC2aDataset(Dataset):
 
         print("\nOriginal Channels:")
         print(raw.ch_names)
-        # Keep the first 22 EEG channels.
-        # The last 3 channels are EOG.
 
-        eeg_channels = raw.ch_names[:22]
+        selected_channels = ["EEG-C3", "EEG-Cz", "EEG-C4"]
+
+        available = [ch for ch in selected_channels if ch in raw.ch_names]
+
+        if len(available) != 3:
+            raise RuntimeError(
+                f"Expected 3 channels, found {available}"
+            )
+
+        raw.pick(available)
 
         print("\nUsing EEG Channels:")
-        print(eeg_channels)
-
-        raw.pick(eeg_channels)
+        print(raw.ch_names)
         events, event_dict = mne.events_from_annotations(raw)
 
         event_mapping = {}
