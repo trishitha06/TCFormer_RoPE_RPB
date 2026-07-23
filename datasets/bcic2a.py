@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 
 from datasets.preprocess import preprocess_trial
 from datasets.augmentation import EEGAugmentation
-
+from sklearn.model_selection import train_test_split
 
 EVENTS = {
     "769": 0,   # Left Hand
@@ -84,7 +84,20 @@ class BCIC2aDataset(Dataset):
             self.labels,
             dtype=np.int64
         )
+        self.train_data, self.val_data, self.train_labels, self.val_labels = train_test_split(
+            self.data,
+            self.labels,
+            test_size=0.2,
+            random_state=42,
+            stratify=self.labels
+        )
 
+        if self.train:
+            self.data = self.train_data
+            self.labels = self.train_labels
+        else:
+            self.data = self.val_data
+            self.labels = self.val_labels
 
     def load_subject(self, filepath):
 
