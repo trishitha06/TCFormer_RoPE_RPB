@@ -23,7 +23,7 @@ class Config:
     # Training
     #####################################################
 
-    EPOCHS = 2
+    EPOCHS = 300
 
     BATCH_SIZE = 64
 
