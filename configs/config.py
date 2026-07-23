@@ -17,7 +17,7 @@ class Config:
 
     SAMPLING_RATE = 250
 
-    TIME_POINTS = 1000
+    TIME_POINTS = 1001
 
     #####################################################
     # Training
