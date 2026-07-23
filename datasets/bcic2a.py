@@ -19,17 +19,9 @@ EVENTS = {
 
 
 SELECTED_CHANNELS = [
-    "C3", "Cz", "C4",
-    "FC1", "FC2",
-    "FC3", "FC4",
-    "FC5", "FC6",
-    "CP1", "CP2",
-    "CP3", "CP4",
-    "CP5", "CP6",
-    "C1", "C2",
-    "C5", "C6",
-    "FCz",
-    "CPz",
+    "C3",
+    "Cz",
+    "C4",
     "Pz"
 ]
 
