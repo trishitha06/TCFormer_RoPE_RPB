@@ -13,7 +13,7 @@ class Config:
 
     NUM_CLASSES = 4
 
-    NUM_CHANNELS = 22
+    NUM_CHANNELS = 3
 
     SAMPLING_RATE = 250
 
