@@ -46,7 +46,7 @@ class BCIC2aDataset(Dataset):
 
         self.root = root
         self.subjects = subjects
-        self.use_augmentation = train
+        self.train = train
 
         self.augment = EEGAugmentation()
 
@@ -59,7 +59,10 @@ class BCIC2aDataset(Dataset):
 
         for subject in self.subjects:
 
-            filename = f"A{subject:02d}T.gdf"
+            if self.train:
+                filename = f"A{subject:02d}T.gdf"
+            else:
+                filename = f"A{subject:02d}E.gdf"
 
             filepath = os.path.join(
                 self.root,
@@ -97,19 +100,33 @@ class BCIC2aDataset(Dataset):
         print("\nOriginal Channels:")
         print(raw.ch_names)
 
-        selected_channels = ["EEG-C3", "EEG-Cz", "EEG-C4"]
+        # Remove EEG- prefix
+        rename_dict = {}
 
-        available = [ch for ch in selected_channels if ch in raw.ch_names]
+        for ch in raw.ch_names:
 
-        if len(available) != 3:
-            raise RuntimeError(
-                f"Expected 3 channels, found {available}"
-            )
+            if ch.startswith("EEG-"):
 
-        raw.pick(available)
+                rename_dict[ch] = ch.replace("EEG-", "")
 
-        print("\nUsing EEG Channels:")
+        raw.rename_channels(rename_dict)
+
+        print("\nRenamed Channels:")
         print(raw.ch_names)
+
+        available_channels = []
+
+        for ch in SELECTED_CHANNELS:
+
+            if ch in raw.ch_names:
+
+                available_channels.append(ch)
+
+        print("\nAvailable Channels:")
+        print(available_channels)
+
+        raw.pick(available_channels)
+
         events, event_dict = mne.events_from_annotations(raw)
 
         event_mapping = {}
@@ -170,7 +187,7 @@ class BCIC2aDataset(Dataset):
 
         label = self.labels[index]
 
-        if self.use_augmentation:
+        if self.train:
 
             trial = self.augment(trial)
 
