@@ -8,8 +8,7 @@ from configs.config import Config
 
 from datasets.bcic2a import BCIC2aDataset
 
-from models.tcformer import TCFormer
-
+from models.tcformer_v2 import TCFormerV2
 from trainer.engine import Trainer
 from trainer.losses import build_loss
 
@@ -26,39 +25,20 @@ def main():
 
     print(f"Using device: {device}")
 
-    from torch.utils.data import random_split, Subset
+    train_subjects = [1, 2, 3, 4, 5, 6, 7]
+    val_subjects = [8, 9]
 
-    subjects = [1, 2, 3, 4, 5, 6, 7]
-
-# Training dataset (augmentation enabled)
-    train_full = BCIC2aDataset(
+    train_dataset = BCIC2aDataset(
         root=cfg.DATA_PATH,
-        subjects=subjects,
+        subjects=train_subjects,
         train=True
     )
 
-# Validation dataset (augmentation disabled)
-    val_full = BCIC2aDataset(
+    val_dataset = BCIC2aDataset(
         root=cfg.DATA_PATH,
-        subjects=subjects,
+        subjects=val_subjects,
         train=False
     )
-
-    dataset_size = len(train_full)
-
-    train_size = int(0.8 * dataset_size)
-    val_size = dataset_size - train_size
-
-    generator = torch.Generator().manual_seed(cfg.SEED)
-
-    train_subset, val_subset = random_split(
-        range(dataset_size),
-        [train_size, val_size],
-        generator=generator
-    )
-
-    train_dataset = Subset(train_full, train_subset.indices)
-    val_dataset = Subset(val_full, val_subset.indices)
 
     train_loader = DataLoader(
         train_dataset,
@@ -76,7 +56,7 @@ def main():
         pin_memory=True
     )
 
-    model = TCFormer(
+    model = TCFormerV2(
 
         num_channels=cfg.NUM_CHANNELS,
 
@@ -144,7 +124,7 @@ def main():
 
         cfg.SAVE_DIR,
 
-        "tcformer_best.pth"
+        "tcformer_v2_best.pth"
 
     )
 
