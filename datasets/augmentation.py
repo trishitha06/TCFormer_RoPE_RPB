@@ -5,9 +5,9 @@ class EEGAugmentation:
 
     def __init__(
         self,
-        noise_std=0.003,
-        scale_range=(0.9, 1.1),
-        shift_range=8,
+        noise_std=0.01,
+        scale_range=(0.8, 1.2),
+        shift_range=15,
         crop_max=20
     ):
 
@@ -93,5 +93,7 @@ class EEGAugmentation:
         if np.random.rand() < 0.5:
             x = self.random_shift(x)
 
+        if np.random.rand() < 0.3:
+            x = self.random_crop(x)
 
         return x.astype(np.float32)
